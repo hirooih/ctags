@@ -450,13 +450,13 @@ static tokenInfo *newToken (void)
 static tokenInfo *dupToken (tokenInfo *token)
 {
 	tokenInfo *dup = newToken ();
-	vStringDelete (dup->name);
-	vStringDelete (dup->blockName);
-	vStringDelete (dup->inheritance);
+	tokenInfo tmp = *dup;	// save vStrings, name, blockName, and inheritance
 	*dup = *token;
-	dup->name = vStringNew ();
-	dup->blockName = vStringNew ();
-	dup->inheritance = vStringNew ();
+	// revert vStrings allocated for dup
+	dup->name = tmp.name;
+	dup->blockName = tmp.blockName;
+	dup->inheritance = tmp.inheritance;
+	// copy contents of vStrings
 	vStringCopy (dup->name, token->name);
 	vStringCopy (dup->blockName, token->blockName);
 	vStringCopy (dup->inheritance, token->inheritance);
